@@ -14,6 +14,8 @@ install.packages("strataG")
 install.packages("mmod")
 install.packages("genetics")
 install.packages("HWxtest")
+devtools::install_github('ericarcher/strataG', build_vignettes = TRUE)
+
 
 ##para cargar la libreria ADEGENET##
 
@@ -75,7 +77,8 @@ adegenetServer()
 
 library(poppr)
 library(magrittr)
-imsn() 
+
+imsn() 
 
 
 ##PARA HACER UN ARTBOL DE NJ CON LA DISTANCIA DE NEI##
@@ -153,25 +156,44 @@ myCol=transp(c("blue","red","orange","green","pink","purple"),.96)[temp] #tantos
 pca1 <- dudi.pca(X,cent=FALSE,scale=FALSE,scannf=FALSE,nf=3)
 barplot(pca1$eig[1:50],main="PCA eigenvalues", col=heat.colors(50))#para sacar la primer grafica
 
-pca1 <- dudi.pca(X,cent=FALSE,scale=FALSE,scannf=FALSE,nf=3)barplot(pca1$eig[1:50],main="PCA eigenvalues", col=heat.colors(50))
+pca1 <- dudi.pca(X,cent=FALSE,scale=FALSE,scannf=FALSE,nf=3)
+barplot(pca1$eig[1:50],main="PCA eigenvalues", col=heat.colors(50))
 
-s.label(pca1$li)title("PCA of obj1 datasetnnaxes 1-2")add.scatter.eig(pca1$eig[1:20], 3,1,2)
+s.label(pca1$li)
+title("PCA of obj1 datasetnnaxes 1-2")
+add.scatter.eig(pca1$eig[1:20], 3,1,2)
 
-s.class(pca1$li, pop(obj1))title("PCA of obj1 datasetnnaxes 1-2")add.scatter.eig(pca1$eig[1:20], 3,1,2)
+s.class(pca1$li, pop(obj1))
+title("PCA of obj1 datasetnnaxes 1-2")
+add.scatter.eig(pca1$eig[1:20], 3,1,2)
 
-s.class(pca1$li,pop(obj1),xax=1,yax=3,sub="PCA 1-3",csub=2)title("PCA of obj1 datasetnnaxes 1-3")add.scatter.eig(pca1$eig[1:20],nf=3,xax=1,yax=3)
+s.class(pca1$li,pop(obj1),xax=1,yax=3,sub="PCA 1-3",csub=2)
+title("PCA of obj1 datasetnnaxes 1-3")
+add.scatter.eig(pca1$eig[1:20],nf=3,xax=1,yax=3)
 
-col <- funky(15)s.class(pca1$li, pop(obj1),xax=1,yax=3, col=transp(col,.6), axesell=FALSE,cstar=0, cpoint=3, grid=FALSE)
+col <- funky(15)
+s.class(pca1$li, pop(obj1),xax=1,yax=3, col=transp(col,.6), axesell=FALSE,
+cstar=0, cpoint=3, grid=FALSE)
 
-colorplot(pca1$li, pca1$li, transp=TRUE, cex=3, xlab="PC 1", ylab="PC 2")title("PCA of obj1 datasetnnaxes 1-2")abline(v=0,h=0,col="grey", lty=2)
+colorplot(pca1$li, pca1$li, transp=TRUE, cex=3, xlab="PC 1", ylab="PC 2")
+title("PCA of obj1 datasetnnaxes 1-2")
+abline(v=0,h=0,col="grey", lty=2)
 
-colorplot(pca1$li[c(1,3)], pca1$li, transp=TRUE, cex=3, xlab="PC 1", ylab="PC 3")title("PCA of microbov datasetnnaxes 1-3")abline(v=0,h=0,col="grey", lty=2)
+colorplot(pca1$li[c(1,3)], pca1$li, transp=TRUE, cex=3, xlab="PC 1", ylab="PC 3")
+title("PCA of microbov datasetnnaxes 1-3")
+abline(v=0,h=0,col="grey", lty=2)
 
-data(obj1)obj1 <- genind2genpop(obj1)
+data(obj1)
+obj1 <- genind2genpop(obj1)
 
 
 install.packages("wordcloud")
-library(wordcloud)set.seed(1)s.label(ca1$li*1.2, sub="CA 1-2",csub=2, clab=0, cpoint="")textplot(ca1$li[,1], ca1$li[,2], words=popNames(obj1),cex=1.4, new=FALSE, xpd=TRUE)add.scatter.eig(ca1$eig,nf=3,xax=1,yax=2,posi="bottomright")
+library(wordcloud)
+set.seed(1)
+s.label(ca1$li*1.2, sub="CA 1-2",csub=2, clab=0, cpoint="")
+textplot(ca1$li[,1], ca1$li[,2], words=popNames(obj1),
+cex=1.4, new=FALSE, xpd=TRUE)
+add.scatter.eig(ca1$eig,nf=3,xax=1,yax=2,posi="bottomright")
 
 
 
@@ -270,25 +292,44 @@ myCol=transp(c("blue","red","orange","green","pink","purple"),.96)[temp] #tantos
 pca1 <- dudi.pca(X,cent=FALSE,scale=FALSE,scannf=FALSE,nf=3)
 barplot(pca1$eig[1:50],main="PCA eigenvalues", col=heat.colors(50))#para sacar la primer grafica
 
-pca1 <- dudi.pca(X,cent=FALSE,scale=FALSE,scannf=FALSE,nf=3)barplot(pca1$eig[1:50],main="PCA eigenvalues", col=heat.colors(50))
+pca1 <- dudi.pca(X,cent=FALSE,scale=FALSE,scannf=FALSE,nf=3)
+barplot(pca1$eig[1:50],main="PCA eigenvalues", col=heat.colors(50))
 
-s.label(pca1$li)title("PCA of obj1 datasetnnaxes 1-2")add.scatter.eig(pca1$eig[1:20], 3,1,2)
+s.label(pca1$li)
+title("PCA of obj1 datasetnnaxes 1-2")
+add.scatter.eig(pca1$eig[1:20], 3,1,2)
 
-s.class(pca1$li, pop(obj1))title("PCA of obj1 datasetnnaxes 1-2")add.scatter.eig(pca1$eig[1:20], 3,1,2)
+s.class(pca1$li, pop(obj1))
+title("PCA of obj1 datasetnnaxes 1-2")
+add.scatter.eig(pca1$eig[1:20], 3,1,2)
 
-s.class(pca1$li,pop(obj1),xax=1,yax=3,sub="PCA 1-3",csub=2)title("PCA of obj1 datasetnnaxes 1-3")add.scatter.eig(pca1$eig[1:20],nf=3,xax=1,yax=3)
+s.class(pca1$li,pop(obj1),xax=1,yax=3,sub="PCA 1-3",csub=2)
+title("PCA of obj1 datasetnnaxes 1-3")
+add.scatter.eig(pca1$eig[1:20],nf=3,xax=1,yax=3)
 
-col <- funky(15)s.class(pca1$li, pop(obj1),xax=1,yax=3, col=transp(col,.6), axesell=FALSE,cstar=0, cpoint=3, grid=FALSE)
+col <- funky(15)
+s.class(pca1$li, pop(obj1),xax=1,yax=3, col=transp(col,.6), axesell=FALSE,
+cstar=0, cpoint=3, grid=FALSE)
 
-colorplot(pca1$li, pca1$li, transp=TRUE, cex=3, xlab="PC 1", ylab="PC 2")title("PCA of obj1 datasetnnaxes 1-2")abline(v=0,h=0,col="grey", lty=2)
+colorplot(pca1$li, pca1$li, transp=TRUE, cex=3, xlab="PC 1", ylab="PC 2")
+title("PCA of obj1 datasetnnaxes 1-2")
+abline(v=0,h=0,col="grey", lty=2)
 
-colorplot(pca1$li[c(1,3)], pca1$li, transp=TRUE, cex=3, xlab="PC 1", ylab="PC 3")title("PCA of microbov datasetnnaxes 1-3")abline(v=0,h=0,col="grey", lty=2)
+colorplot(pca1$li[c(1,3)], pca1$li, transp=TRUE, cex=3, xlab="PC 1", ylab="PC 3")
+title("PCA of microbov datasetnnaxes 1-3")
+abline(v=0,h=0,col="grey", lty=2)
 
-data(obj1)obj1 <- genind2genpop(obj1)
+data(obj1)
+obj1 <- genind2genpop(obj1)
 
 
 install.packages("wordcloud")
-library(wordcloud)set.seed(1)s.label(ca1$li*1.2, sub="CA 1-2",csub=2, clab=0, cpoint="")textplot(ca1$li[,1], ca1$li[,2], words=popNames(obj1),cex=1.4, new=FALSE, xpd=TRUE)add.scatter.eig(ca1$eig,nf=3,xax=1,yax=2,posi="bottomright")
+library(wordcloud)
+set.seed(1)
+s.label(ca1$li*1.2, sub="CA 1-2",csub=2, clab=0, cpoint="")
+textplot(ca1$li[,1], ca1$li[,2], words=popNames(obj1),
+cex=1.4, new=FALSE, xpd=TRUE)
+add.scatter.eig(ca1$eig,nf=3,xax=1,yax=2,posi="bottomright")
 
 
 
@@ -325,7 +366,15 @@ library("poppr")
 library("magrittr")
 splitStrata(obj1) <- ~Tree/Year/Symptom
 summary(obj1)
-splitStrata(obj1) <- ~Tree/Year/Symptomsummary(obj1)monpop_ssr <- c(CHMFc4 = 7, CHMFc5 = 2, CHMFc12 = 4,SEA = 4, SED = 4, SEE = 2, SEG = 6,SEI = 3, SEL = 4, SEN = 2, SEP = 4,SEQ = 2, SER = 4)t26 <- obj1 %>% setPop(~Tree) %>% popsub("26") %>% setPop(~Year/Symptom)t26imsn() # select Bruvo's distance and enter “obj1_ssr" into the Repeat Length field.
+splitStrata(obj1) <- ~Tree/Year/Symptom
+summary(obj1)
+monpop_ssr <- c(CHMFc4 = 7, CHMFc5 = 2, CHMFc12 = 4,
+SEA = 4, SED = 4, SEE = 2, SEG = 6,
+SEI = 3, SEL = 4, SEN = 2, SEP = 4,
+SEQ = 2, SER = 4)
+t26 <- obj1 %>% setPop(~Tree) %>% popsub("26") %>% setPop(~Year/Symptom)
+t26
+imsn() # select Bruvo's distance and enter “obj1_ssr" into the Repeat Length field.
 
 
 #####PARA SACAR ALELOS PRIVADOS POR POBLACION#######
