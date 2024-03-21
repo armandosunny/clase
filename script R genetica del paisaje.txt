@@ -11,7 +11,7 @@ install.packages("poppr")
 install.packages("magrittr")
 install.packages("mmod")
 install.packages("genetics")
-install.packages("HWxtest")
+HWxtest ###este descargarlo del repositorio de la clase   (https://github.com/armandosunny/clase/blob/main/HWxtest_1.1.9.tar.gz)####
 devtools::install_github('ericarcher/strataG', build_vignettes = TRUE)
 
 
