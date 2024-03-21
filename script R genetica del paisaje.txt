@@ -1,0 +1,557 @@
+﻿##para instalar librerías genética de poblaciones##
+
+install.packages("adegenet")
+install.packages("devtools")
+install.packages("pegas")
+install.packages("hierfstat")
+install.packages("ape")
+install.packages("poppr")
+install.packages("magrittr")
+install.packages("strataG")
+install.packages("poppr")
+install.packages("magrittr")
+install.packages("strataG")
+install.packages("mmod")
+install.packages("genetics")
+install.packages("HWxtest")
+
+##para cargar la libreria ADEGENET##
+
+library(adegenet)
+
+##para seleccionar la carpeta de trabajo##
+
+setwd("/Users/macbookair/Desktop")
+
+##para leer la base de datos de ADEGENET##
+
+obj1=read.fstat("robert.dat")#para cargar la base de datos
+
+##para hacer un objeto genind2 en ADEGENET##
+
+obj2=genind2genpop(obj1)#Para convertir a genpop (sale el número de poblaciones)
+
+
+##para cargar todas las demás librerias##
+
+library(adegenet)
+library("devtools")
+library("pegas")
+library("hierfstat")
+library("ape")
+library ("poppr")
+library("magrittr")
+library("strataG")
+library("lattice")
+library("mmod")
+library("genetics")
+library("HWxtest")
+
+##para crear un objeto genind2type##
+
+obj3=genind2gtypes(obj1)
+
+
+
+#VER SI TODOS LOS MICROS SON POLIMORFOS
+
+polimorfimso=informloci(obj1)
+
+
+##PARA VER CUANTOS MICROS SON NECESARIOS##
+
+library (poppr)
+mgeno=genotype_curve(obj1)
+
+
+
+##PARA HACER UN DAPC: a server for the Discriminant Analysis##
+
+
+adegenetServer()
+
+
+##PARA HACER UN MINIMUM SPANNING NETWORK##
+
+library(poppr)
+library(magrittr)
+imsn() 
+
+
+##PARA HACER UN ARTBOL DE NJ CON LA DISTANCIA DE NEI##
+
+neiobj1 <- aboot(obj1, dist = nei.dist)# hacer el árbol
+plot(neiobj1, type = "unr", show.tip.lab = TRUE, cex=0.6, font=6, edge.col="Black") # graficar el arbol
+add.scale.bar(length = 0.05)# ponerle la escala
+
+
+
+ #Para hacer un análisis de componentes principales##
+
+
+#LA BASE DE COORDENADAS TIENE QUE TENER ESTE FORMATO (.txt)
+
+X Y
+45.43812 24.69272
+43.93776 19.30608
+
+###PARA IMPORTAR LA BASE DE COORDENADAS###
+input="coord.txt"
+data=read.table(input,header=T)
+obj_Coord <- data
+obj_Coord
+
+
+####para guardar tablas generadas por R####
+write.csv(locustable, file = "eveness")
+
+
+##PARA HACER HWT PARA CADA POBLACION Hardy-Weinberg equilibrium##
+
+(ambyhwetodas=seppop(obj1) %>% lapply(hw.test,B=1000))
+
+
+(ambyhwe.mat <- sapply(ambyhwetodas, "[", i = TRUE, j = 3))#PARA TENER LOS VALORES SOLO DE LA CHI2 POR LOCUS Y POBLACION
+
+alpha  <- 0.05 #OBTENER SOLO LOS VALORES QUE SON SIGNIFICATIVOS 
+
+ambymat=ambyhwe.mat
+
+ambymat[ambymat > alpha] <- 1
+
+library("lattice")
+
+levelplot(t(ambymat))#para traficar los loci que están fuera de HWE Heatmap showing significant departures from HWE
+
+This simple plot shows us loci in rows and populations in columns. Note, that all loci shown in pink are loci suspected of not being in HWE with p≤0.05p≤0.05.
+
+References
+Goss EM., Tabima JF., Cooke DEL., Restrepo S., Fry WE., Forbes GA., Fieland VJ., Cardenas M., Grünwald NJ. 2014. The Irish potato famine pathogen Phytophthora infestans originated in central mexico rather than the andes. Proceedings of the National Academy of Sciences 111:8791–8796. Available at: http://www.pnas.org/content/early/2014/05/29/1401884111.abstract
+
+
+
+
+
+
+
+K-means hierarchical clustering
+
+BIC
+
+
+
+
+
+
+#PARA HACER EL PCA##
+
+X=tab(obj1,NA.method="mean")#Tabla para hacer el PCA
+#Para hacer el PCA
+pca1=dudi.pca(X,scannf=FALSE,scale=FALSE)
+temp=as.integer(pop(obj1))
+myCol=transp(c("blue","red","orange","green","pink","purple"),.96)[temp] #tantos colores como poblaciones tengamos, .96 porque tenemos 96 individuos
+pca1 <- dudi.pca(X,cent=FALSE,scale=FALSE,scannf=FALSE,nf=3)
+barplot(pca1$eig[1:50],main="PCA eigenvalues", col=heat.colors(50))#para sacar la primer grafica
+
+pca1 <- dudi.pca(X,cent=FALSE,scale=FALSE,scannf=FALSE,nf=3)barplot(pca1$eig[1:50],main="PCA eigenvalues", col=heat.colors(50))
+
+s.label(pca1$li)title("PCA of obj1 datasetnnaxes 1-2")add.scatter.eig(pca1$eig[1:20], 3,1,2)
+
+s.class(pca1$li, pop(obj1))title("PCA of obj1 datasetnnaxes 1-2")add.scatter.eig(pca1$eig[1:20], 3,1,2)
+
+s.class(pca1$li,pop(obj1),xax=1,yax=3,sub="PCA 1-3",csub=2)title("PCA of obj1 datasetnnaxes 1-3")add.scatter.eig(pca1$eig[1:20],nf=3,xax=1,yax=3)
+
+col <- funky(15)s.class(pca1$li, pop(obj1),xax=1,yax=3, col=transp(col,.6), axesell=FALSE,cstar=0, cpoint=3, grid=FALSE)
+
+colorplot(pca1$li, pca1$li, transp=TRUE, cex=3, xlab="PC 1", ylab="PC 2")title("PCA of obj1 datasetnnaxes 1-2")abline(v=0,h=0,col="grey", lty=2)
+
+colorplot(pca1$li[c(1,3)], pca1$li, transp=TRUE, cex=3, xlab="PC 1", ylab="PC 3")title("PCA of microbov datasetnnaxes 1-3")abline(v=0,h=0,col="grey", lty=2)
+
+data(obj1)obj1 <- genind2genpop(obj1)
+
+
+install.packages("wordcloud")
+library(wordcloud)set.seed(1)s.label(ca1$li*1.2, sub="CA 1-2",csub=2, clab=0, cpoint="")textplot(ca1$li[,1], ca1$li[,2], words=popNames(obj1),cex=1.4, new=FALSE, xpd=TRUE)add.scatter.eig(ca1$eig,nf=3,xax=1,yax=2,posi="bottomright")
+
+
+
+
+##PARA HACER EL ARBOL NJ##
+
+library("devtools")
+library("pegas")
+library("hierfstat")
+library("ape")
+library("pegas")
+Fst(as.loci(obj1))
+Gtest <- gstat.randtest(obj1,nsim=99)
+plot(Gtest)
+matFst <- pairwise.fst(obj1[1:96,])
+matFst
+obj1.matFst <- pairwise.fst(obj1,res.type="matrix")
+obj1.matFst[1:6,1:6]
+
+obj1.tree <- nj(obj1.matFst)
+plot(obj1.tree, type="unr", tip.col=funky(nPop(obj1)), font=2)
+annot <- round(obj1.tree$edge.length,2)
+edgelabels(annot[annot>0], which(annot>0), frame="n")
+add.scale.bar()
+
+
+
+
+
+##PARA SACAR ALELOS PRIVADOS POR POBLACION##
+
+library ("poppr")
+private_alleles(obj1)
+
+##PARA SACAR LOS INDICES DE EVENNESS##
+
+library ("poppr")
+
+locus_table(obj1[pop = 1])
+
+
+
+
+
+
+References
+Goss EM., Larsen M., Chastagner GA., Givens DR., Grünwald NJ. 2009. Population genetic analysis infers migration pathways of phytophthora ramorum in us nurseries. PLoS Pathog 5:e1000583. Available at: http://dx.doi.org/10.1371/journal.ppat.1000583
+
+Grünwald NJ., Goss EM. 2011. Evolution and population genetics of exotic and re-emerging pathogens: Novel tools and approaches. Annual Review of Phytopathology 49:249–267. Available at: http://www.annualreviews.org/doi/abs/10.1146/annurev-phyto-072910-095246?journalCode=phyto
+
+Jombart T., Devillard S., Balloux F. 2010. Discriminant analysis of principal components: A new method for the analysis of genetically structured populations. BMC genetics 11:94. Available at: http://www.biomedcentral.com/1471-2156/11/94
+
+Kamvar Z., Larsen M., Kanaskie A., Hansen E., Grünwald N. 2015. Spatial and temporal analysis of populations of the sudden oak death pathogen in oregon forests. Phytopathology 105:982–989. Available at: http://dx.doi.org/10.1094/PHYTO-12-14-0350-FI
+
+Pritchard JK., Stephens M., Donnelly P. 2000. Inference of population structure using multilocus genotype data. Genetics 155:945–959. Available at: http://www.genetics.org/content/155/2/945.abstract
+
+
+
+
+
+
+
+
+
+
+Libro: http://dyerlab.github.io/applied_population_genetics/index.html
+
+
+library(adegenet) #Para hacer un análisis de componentes 
+setwd("/Users/macbookair/Desktop") # para poner como working directory
+ obj1=read.fstat("robert.dat")#para cargar la base de datos
+obj2=genind2genpop(obj1)#Para convertir a genpop (sale el número de poblaciones)
+
+#LA BASE DE COORDENADAS TIENE QUE TENER ESTE FORMATO (.txt)
+
+X Y
+45.43812 24.69272
+43.93776 19.30608
+
+#PARA IMPORTAR LA BASE DE COORDENADAS###
+input="coord.txt"
+data=read.table(input,header=T)
+obj_Coord <- data
+obj_Coord
+
+
+
+
+#PARA HACER EL PCA####
+
+X=tab(obj1,NA.method="mean")#Tabla para hacer el PCA
+#Para hacer el PCA
+pca1=dudi.pca(X,scannf=FALSE,scale=FALSE)
+temp=as.integer(pop(obj1))
+myCol=transp(c("blue","red","orange","green","pink","purple"),.96)[temp] #tantos colores como poblaciones tengamos, .96 porque tenemos 96 individuos
+pca1 <- dudi.pca(X,cent=FALSE,scale=FALSE,scannf=FALSE,nf=3)
+barplot(pca1$eig[1:50],main="PCA eigenvalues", col=heat.colors(50))#para sacar la primer grafica
+
+pca1 <- dudi.pca(X,cent=FALSE,scale=FALSE,scannf=FALSE,nf=3)barplot(pca1$eig[1:50],main="PCA eigenvalues", col=heat.colors(50))
+
+s.label(pca1$li)title("PCA of obj1 datasetnnaxes 1-2")add.scatter.eig(pca1$eig[1:20], 3,1,2)
+
+s.class(pca1$li, pop(obj1))title("PCA of obj1 datasetnnaxes 1-2")add.scatter.eig(pca1$eig[1:20], 3,1,2)
+
+s.class(pca1$li,pop(obj1),xax=1,yax=3,sub="PCA 1-3",csub=2)title("PCA of obj1 datasetnnaxes 1-3")add.scatter.eig(pca1$eig[1:20],nf=3,xax=1,yax=3)
+
+col <- funky(15)s.class(pca1$li, pop(obj1),xax=1,yax=3, col=transp(col,.6), axesell=FALSE,cstar=0, cpoint=3, grid=FALSE)
+
+colorplot(pca1$li, pca1$li, transp=TRUE, cex=3, xlab="PC 1", ylab="PC 2")title("PCA of obj1 datasetnnaxes 1-2")abline(v=0,h=0,col="grey", lty=2)
+
+colorplot(pca1$li[c(1,3)], pca1$li, transp=TRUE, cex=3, xlab="PC 1", ylab="PC 3")title("PCA of microbov datasetnnaxes 1-3")abline(v=0,h=0,col="grey", lty=2)
+
+data(obj1)obj1 <- genind2genpop(obj1)
+
+
+install.packages("wordcloud")
+library(wordcloud)set.seed(1)s.label(ca1$li*1.2, sub="CA 1-2",csub=2, clab=0, cpoint="")textplot(ca1$li[,1], ca1$li[,2], words=popNames(obj1),cex=1.4, new=FALSE, xpd=TRUE)add.scatter.eig(ca1$eig,nf=3,xax=1,yax=2,posi="bottomright")
+
+
+
+
+#####PARA HACER EL ARBOL NJ#######
+
+library("devtools")
+library("pegas")
+library("hierfstat")
+library("ape")
+library("pegas")
+Fst(as.loci(obj1))
+Gtest <- gstat.randtest(obj1,nsim=99)
+plot(Gtest)
+matFst <- pairwise.fst(obj1[1:96,])
+matFst
+obj1.matFst <- pairwise.fst(obj1,res.type="matrix")
+obj1.matFst[1:6,1:6]
+
+obj1.tree <- nj(obj1.matFst)
+plot(obj1.tree, type="unr", tip.col=funky(nPop(obj1)), font=2)
+annot <- round(obj1.tree$edge.length,2)
+edgelabels(annot[annot>0], which(annot>0), frame="n")
+add.scale.bar()
+
+######PARA VER CUANTOS MICROS SON NECESARIOS#######
+
+library ("poppr")
+mgeno=genotype_curve(obj1)
+
+#####PARA HACER UN MINIMUM SPANNING NETWORK#####
+
+library("poppr")
+library("magrittr")
+splitStrata(obj1) <- ~Tree/Year/Symptom
+summary(obj1)
+splitStrata(obj1) <- ~Tree/Year/Symptomsummary(obj1)monpop_ssr <- c(CHMFc4 = 7, CHMFc5 = 2, CHMFc12 = 4,SEA = 4, SED = 4, SEE = 2, SEG = 6,SEI = 3, SEL = 4, SEN = 2, SEP = 4,SEQ = 2, SER = 4)t26 <- obj1 %>% setPop(~Tree) %>% popsub("26") %>% setPop(~Year/Symptom)t26imsn() # select Bruvo's distance and enter “obj1_ssr" into the Repeat Length field.
+
+
+#####PARA SACAR ALELOS PRIVADOS POR POBLACION#######
+
+library ("poppr")
+private_alleles(obj1)
+
+#######PARA SACAR LOS INDICES DE EVENNESS#######
+
+library ("poppr")
+
+locus_table(obj1[pop = 1])
+
+
+#######PARA HACER UN ARTBOL DE NJ CON LA DISTANCIA DE NEI#######
+neiobj1 <- aboot(obj1, dist = nei.dist)
+
+#######PARA HACER UN DAPC: a server for the Discriminant Analysis########
+adegenetServer()
+
+######PARA CALCULAR LA HETEROOCIGOSIS ESPERADA ENTRE POBLACIONES######
+Hs(genind2genpop(obj1))
+
+
+
+
+######CONVERTIR BASES DE DATOS GENIND A GTYPES (PARA STRATAG)######
+
+library("strataG")
+
+obj3=genind2gtypes(obj1)
+
+#####PARA VER LOS NUMEROS DE ALELOS Y HETEROOCIGOSIS OBSERVADA######
+
+obj3
+
+####PARA CALCULAR LOS INDICES DE GARZA-WILLIAMSON####
+
+m.by.strata <- mRatio(obj3, TRUE)
+m.by.strata
+
+m.overall <- mRatio(obj3, FALSE)
+m.overall
+
+#####SACAR ALELOS PRIVADOS POR LOCUS Y POBLACIONES####
+
+privateAlleles(obj3)
+
+
+######INTERFAZ GRAFICA PARA CREAR OBJETOS GTYPES###### 
+
+strataGUI()
+
+#####SOFTWARE PARA EDITAR RESULTADOS DE STRUCTURE Y EVANNO#######
+
+http://www.pophelper.com/
+https://www.youtube.com/watch?v=UDKu4CIsuQg#t=407.095036
+
+######PARA CALCULAR NE CON LDNE#######
+
+ldNe(obj3, maf.threshold = 0, by.strata = FALSE, ci = 0.95)
+
+#####PARA CALCULAR HE, HO, RIQUEZA ALELICA, NUMERO DE ALELOS POR POBLACIONES####
+
+summarizeLoci(obj3, by.strata = TRUE)
+
+##########PARA SACAR 5 TIPOS DE DISTANCIA GENETICA##########
+EN ADEGENET
+
+#si la queremos en trisquare#
+dist.genpop(obj2, method = 2) ##EN METHOD ESCOGEMOS DEL 1 AL 5 DEPENDIENDO DEL METODO QUE QUERRAMOS, VER MANUAL DE ADEGENET
+
+#si la queremos en cuadrado#
+dist.genpop(obj2, method = 2, diag = TRUE, upper = TRUE)
+
+##########PARA SACAR DISTANCIA GENETICA JOST Y OTRAS DISTANCIAS GENETICAS##########
+
+library(mmod)
+
+destpair=pairwise_D(obj1, linearized = FALSE, hsht_mean = "arithmetic")
+
+### Installing ResistanceGA ###
+
+library(devtools)
+install_github("wpeterman/ResistanceGA")
+
+### Loading packages ###
+
+  # Before load ResistanceGA, you have to install the packages raster, sp and ggplot2 #
+
+library(raster)
+library(ResistanceGA)
+library(gdistance)
+
+### Creating directory to save outputs ###
+
+dir<-"/Users/rafaeldefraga/Documents/Genética de cobras/ResistanceGA/output_directory"
+
+# There's a bug in the package at this point. I'm not sure if the author already corrected it. Anyway, you must go to the same place in your computer where you created the directory with the command line above, and manually create an additional folder with the same name, followed by Results. For example, if your output directory was named Ben, you have to create a new folder named BenResults (outside the folder Ben). In the folder BenResults you must create 3 subfolders, named Plots, Results and tmp.
+
+
+### Preparing objects to optimize resistance surface - Please, have a look at the ResistanceGA tutorials to define the best parameters setting. You can also change another parameters, such as mutation rate and crossover rate. You can easily find help by using the command ?GA.prep ###
+
+
+# Least Cost Path #
+
+ga.prep<-GA.prep(ASCII.dir=dir,max.cat=100,max.cont=100,pop.mult=25,maxiter=10,seed=555,quiet=TRUE)
+
+
+### Creating inputs to estimate cost distances ###
+
+samples.coordinates<-read.table(file.choose(),header=T)
+# This is a list of your samples coordinates in two columns (X and Y)
+
+samples<-SpatialPoints(samples.coordinates)
+# Convert coordinates in a SpatialPoints object
+
+genetic.distance<-as.dist(read.table(file.choose(),header=T))
+# This uploads your pairwise genetic distance matrix from a .txt
+
+gdist.inputs<-gdist.prep(n.POPS=length(samples),response=lower(as.matrix(genetic.distance)),samples=samples,directions=4)
+# Please, see ?gdist.prep to change parameters
+
+### Estimating cost distances using gdistance package ###
+
+variable<-raster(file.choose())
+# This uploads an environmental data in raster format (.asc). The file must be saved in the directory you first created.
+
+response<-Run_gdistance(gdist.inputs=gdist.inputs,r=variable)
+
+### Run gdist.prep again, now including response from gdistance
+
+gdist.response<-gdist.prep(n.POPS=length(samples),samples=samples,directions=4,response=lower(as.matrix(response)))
+
+### Optimizing resistance surface (one environmental variable)
+
+resistance<-SS_optim(gdist.inputs=gdist.response,GA.inputs=ga.prep)
+
+
+### Optimizing multiple resistance surface (more than one environmental data)
+
+# To optimize a multilple resistance surface you just have to save all the files in the same directory you created.
+
+ga.multi<-GA.prep(ASCII.dir=dir, max.cat=500, max.cont=500, seed=999, parallel=4)
+
+gdist.multi<-gdist.prep(n.POPS=length(samples),response=lower(as.matrix(genetic.distance)),samples=samples)
+
+multiple.resistance<-MS_optim(gdist.inputs=gdist.multi,GA.inputs=ga.multi)
+# This should take a long time to run. You will find the resistance surface (raster) in your BenResults folder
+
+summary(multiple.resistance)
+
+
+## Circuitscape – you need Circuitscape installed in the Program Files folder ##
+
+CS.inputs<-CS.prep(n.POPS=length(samples),CS_Points.File=paste0(write.dir, “samples.txt”),CS.program= ‘ “C:/Program Files/Circuitscape/cs_run.exe” ’)
+
+CS.response<-Run_CS(CS.inputs=CS.inputs,GA.inputs=GA.inputs,r=variable)
+
+## The rest is the same as in Least Cost Path ##
+
+
+### Obtaining pairwise cost distance matrices from least cost path using the gdistance package ###
+
+
+library(gdistance)
+
+# Loading optimized resistance surface (raster)
+
+optimized.surface<-raster(file.choose())
+
+# Creating a transition from the raster
+
+transition<-transition(optimized.surface,mean,directions=4)
+
+# Correcting transition
+
+transition.correction<-geoCorrection(transition,"c",scl=TRUE)
+
+# Obtaining pairwise cost matrix
+
+cost<-costDistance(transition.correction)
+
+
+### Testing for the effects of IBD and IBR on gene flow ###
+
+# Uploading distance matrices
+genetic.distance<-1-(as.dist(read.table(file.choose(),header=T)))
+geographic.distance<-as.dist(read.table(file.choose(),header=T))
+cost.distance<-as.dist(read.table(file.choose(),header=T))
+
+
+# Converting distance matrices in PCoA scores
+
+pcoa.genetic<-cmdscale(genetic.distance,k=1)
+pcoa.geographic<-cmdscale(geographic.distance,k=1)
+pcoa.cost<-cmdscale(cost.distance,k=1)
+
+# RDA
+
+library(vegan)
+
+rda.full<-rda(pcoa.genetic~pcoa.geographic+pcoa.cost,scale=TRUE)
+head(summary(rda.full))
+anova(rda.full,by="terms")
+RsquareAdj(rda.full)
+
+rda.IBD<-rda(pcoa.genetic~pcoa.geographic+Condition(pcoa.cost),scale=TRUE)
+summary(rda.IBD)
+anova(rda.IBD,by="terms")
+RsquareAdj(rda.IBD)
+
+rda.IBR<-rda(pcoa.genetic~pcoa.cost+Condition(pcoa.geographic),scale=TRUE)
+summary(rda.IBR)
+anova(rda.IBR,by="terms")
+RsquareAdj(rda.IBR)
+
+plot(rda.full,pch=19)
+
+
+# Multiple regression
+
+regression<-lm(pcoa.scores.genetic~pcoa.scores.geographic+pcoa.scores.cost)
+summary(regression)
+
+# Plotting residuals
+
+avPlots(regression,col.lines=“black”,lwd=3,grid=FALSE,pch=19,cex=1.5,marginal.scale=TRUE)
+
